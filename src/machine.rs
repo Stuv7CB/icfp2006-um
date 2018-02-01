@@ -77,10 +77,11 @@ impl Machine {
                 Operator::Abandonment(data) => {
                     let index= *self.reg_get(data.c);
                     self.free_addr.push(index.unwrap());
+                    self.memory[index.unwrap() as usize] = Vec::new();
                 }
                 Operator::Output(data) => {
                     let data_to_write = self.reg_get(data.c).unwrap();
-                    std::io::stdout().write(&[data_to_write as u8]).unwrap();
+                    std::io::stdout().write_all(&[data_to_write as u8]).unwrap();
                     std::io::stdout().flush().unwrap();
                 }
                 Operator::Input(data) => {
