@@ -79,7 +79,8 @@ impl Machine {
                     self.free_addr.push(index.unwrap());
                 }
                 Operator::Output(data) => {
-                    print!("{}", (self.registers[data.c as usize].unwrap() as u8) as char);
+                    let data_to_write = self.reg_get(data.c).unwrap();
+                    std::io::stdout().write(&[data_to_write as u8]).unwrap();
                     std::io::stdout().flush().unwrap();
                 }
                 Operator::Input(data) => {
