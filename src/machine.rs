@@ -1,6 +1,6 @@
 use plate::{Plate};
 use operator::{Operator};
-use std::io::Read;
+use std::io::{Read, Write};
 use std;
 
 #[derive(Debug)]
@@ -80,6 +80,7 @@ impl Machine {
                 }
                 Operator::Output(data) => {
                     print!("{}", (self.registers[data.c as usize].unwrap() as u8) as char);
+                    std::io::stdout().flush().unwrap();
                 }
                 Operator::Input(data) => {
                     self.registers[data.c as usize] = Plate::from(std::io::stdin()
@@ -87,9 +88,6 @@ impl Machine {
                         .next()
                         .and_then(|result| result.ok())
                         .map(|byte| {
-                            if byte == b'\n' {
-                                return 0xFFFF_FFFF;
-                            }
                             u32::from(byte)
                         }).unwrap());
                 }
